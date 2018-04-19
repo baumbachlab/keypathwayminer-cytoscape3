@@ -11,13 +11,13 @@
 		<felix-sys-prop.org.osgi.framework.system.packages.extra>sun.misc</felix-sys-prop.org.osgi.framework.system.packages.extra>
 		<maven-bundle-plugin.version>2.3.4</maven-bundle-plugin.version>
 		<osgi.api.version>4.2.0</osgi.api.version>
-		<kpm.library.version>5.0.0.001</kpm.library.version>
+		<kpm.library.version>5.0.0.002</kpm.library.version>
 	</properties>
 
 	<groupId>de.mpg.mpiinf.csb</groupId>
 	<artifactId>KeyPathwayMiner</artifactId>
 	<version>5.0</version>
-	<name>KPM4Cyto3Plugin</name>
+	<name>KeyPathwayMiner</name>
 	<packaging>bundle</packaging>
 	<description>KeyPathwayMiner plugin for Cytoscape</description>
 

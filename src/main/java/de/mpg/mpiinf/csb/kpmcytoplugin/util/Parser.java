@@ -78,6 +78,53 @@ public class Parser {
 		}
 
 	}
+        
+        public Parser(HashMap<String, Map<String, float[]>> pvalMatrices, 
+                HashMap<String, Double> cutoffs) {
+                HashMap<String, Map<String, int[]>> expressionFiles = 
+                        new HashMap<String, Map<String, int[]>>(pvalMatrices.size());
+                
+                for (String fileId: pvalMatrices.keySet()) {
+                    if (!cutoffs.containsKey(fileId)) {
+                        throw new NullPointerException("No cutoff value found for fileId: " + fileId);
+                    }
+                    double cutoff = cutoffs.get(fileId);
+                    Map<String, float[]> pmatrix = pvalMatrices.get(fileId);
+                    Map<String, int[]> imatrix = new HashMap<String, int[]>(pmatrix.size());
+                    for (String geneId: pmatrix.keySet()) {
+                        float[] pvals = pmatrix.get(geneId);
+                        int[] vals = new int[pvals.length];
+                        for (int i = 0; i < pvals.length; i++){
+                            vals[i] = pvals[i] < cutoff ? 1 : 0;
+                        }
+                        imatrix.put(geneId, vals);
+                    }
+                    expressionFiles.put(fileId, imatrix);
+                    
+                }
+		
+                this.indicatorMatrices = expressionFiles;
+		backNodesMap = new HashMap<String, Set<String>>();
+		backNodesByExpMap = new HashMap<String, Set<String>>();
+		backGenesMap = new HashMap<String, Set<String>>();
+		numCasesMap = new HashMap<String, Integer>();
+		numGenesMap = new HashMap<String, Integer>();
+		avgExpressedCasesMap = new HashMap<String, Double>();
+		avgExpressedGenesMap = new HashMap<String, Double>();
+		totalExpressedMap = new HashMap<String, Integer>();
+
+		sizeIntersectionDataSetsNetwork = new HashMap<String, Integer>();
+		for (String internalID: expressionFiles.keySet()) {
+			String globalID = CyGlobals.KPM.externalToInternalIDManager.getExternalIdentifier(internalID);
+			sizeIntersectionDataSetsNetwork.put(globalID, 0);
+		}
+
+		for (String expId : expressionFiles.keySet()) {
+			backGenesMap.put(expId, new HashSet<String>());
+			numCasesMap.put(expId, 0);
+		}
+
+	}
 
 	public HashMap<String, Set<String>> getBackNodesMap() {
 		return backNodesMap;
